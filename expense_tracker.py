@@ -1,59 +1,35 @@
-
 expenses = []
 
-def add_expense():
-    name = input("Expense name: ")
-    amount = float(input("Amount: "))
-    expenses.append((name, amount))
+def add_expense(amount, category):
+    expenses.append({"amount": amount, "category": category})
     print("Expense added!")
 
-def show_expenses():
+def view_expenses():
     if not expenses:
         print("No expenses yet.")
     else:
-        for i, (name, amount) in enumerate(expenses, 1):
-            print(f"{i}. {name}: {amount:.2f}")
+        for i, e in enumerate(expenses):
+            print(f"{i}: {e['category']} - {e['amount']}")
 
-def show_total():
-    total = sum(amount for _, amount in expenses)
-    print(f"Total: {total:.2f}")
+def delete_expense(index):
+    if 0 <= index < len(expenses):
+        removed = expenses.pop(index)
+        print(f"Deleted: {removed}")
+    else:
+        print("Invalid index!")
 
-def delete_expense():
-    show_expenses()
+def average_expense():
     if not expenses:
-        return
-    try:
-        num = int(input("Enter expense number to delete: "))
-        if 1 <= num <= len(expenses):
-            removed = expenses.pop(num - 1)
-            print(f"Deleted: {removed[0]}")
-        else:
-            print("Invalid number.")
-    except ValueError:
-        print("Please enter a number.")
+        print("No expenses to calculate average.")
+    else:
+        total = sum(e["amount"] for e in expenses)
+        avg = total / len(expenses)
+        print(f"Average expense: {avg}")
 
-def main():
-    while True:
-        print("\n===== EXPENSE TRACKER =====")
-        print("1. Add an expense")
-        print("2. View expenses")
-        print("3. Show total")
-        print("4. Delete an expense")
-        print("5. Exit")
-        choice = input("Choose an option: ")
-        if choice == "1":
-            add_expense()
-        elif choice == "2":
-            show_expenses()
-        elif choice == "3":
-            show_total()
-        elif choice == "4":
-            delete_expense()
-        elif choice == "5":
-            print("Goodbye!")
-            break
-        else:
-            print("Invalid option.")
-
-if __name__ == "__main__":
-    main()
+# Test
+add_expense(100, "Food")
+add_expense(200, "Transport")
+view_expenses()
+average_expense()
+delete_expense(0)
+view_expenses()
